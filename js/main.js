@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     // random color for heading
     $('a.nav-link').each(function (i, obj) {
         if ($(obj).hasClass("active")) {
@@ -7,13 +8,25 @@ $(document).ready(function () {
             $(obj).css("color", "hsla(" + Math.floor(Math.random() * (360)) + ", 75%, 58%, 1)");
         }
     });
+
     // random color for btn-success
     $('.btn-success').each(function (i, obj) {
         $(obj).css("background-color", "hsla(" + Math.floor(Math.random() * (360)) + ", 75%, 58%, 1)");
         $(obj).css("border", "none");
     });
+
     // random color for titles
-    $('.random-color').each(function (i, obj) {
+    randomChangeLetterColors(".random-color");
+
+    // create interval for random changing colors
+    setInterval(function () {
+        randomChangeLetterColors(".random-color-interval");
+    }, 200);
+
+});
+
+function randomChangeLetterColors(objRef) {
+    $(objRef).each(function (i, obj) {
         var chars = $(obj).text().split('');
         $(obj).html('');
         for (var i = 0; i < chars.length; i++) {
@@ -21,7 +34,7 @@ $(document).ready(function () {
             $(obj).append(span);
         }
     });
-});
+}
 
 function setCookie(cname, cvalue, exdays) {
     const d = new Date();
@@ -53,11 +66,37 @@ function getCookie(cname) {
 function checkCookie() {
     let last_visit = getCookie("last_visit");
     if (last_visit !== "") {
+        // show alert
         $("#span-last-visit").text(last_visit);
         $('#alert-cookie').show();
+
+        // set cookie again with current datetime
+        const current_date = new Date();
+        setCookie("last_visit", formatDate(current_date), 365);
     } else {
-        const current_date = new Date().toDateString();
-        setCookie("last_visit", current_date, 365);
+        // set cookie with current datetime
+        const current_date = new Date();
+        setCookie("last_visit", formatDate(current_date), 365);
+        // hide alert
         $('#alert-cookie').hide();
     }
+}
+
+function formatDate(date) {
+    const monthNames = [
+        "January", "February", "March",
+        "April", "May", "June", "July",
+        "August", "September", "October",
+        "November", "December"
+    ];
+
+    let seconds = date.getSeconds();
+    let minutes = date.getMinutes();
+    let hours = date.getHours();
+
+    let day = date.getDate();
+    let monthIndex = date.getMonth();
+    let year = date.getFullYear();
+
+    return  day + '. ' + monthNames[monthIndex] + ' ' + year + ' at ' + hours + ':' + minutes + ':' + seconds;
 }
