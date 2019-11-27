@@ -1,0 +1,5 @@
+[
+{"quote":"THIS is a very good cite... - Max Muster","image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4IKVoD5Cjel4UVFW2ee5F3pSXW0nhOJgE-esxb5lGFbyZ6-fu&s"},
+{"quote":"Random Random Random, very. - Water Screen","image":"https://dibsy.ch/shop/resources/product_images_klein/983_kl.jpg"},
+{"quote":"Happy Random Forrest!! - Hough Hefner","image":"https://cdn11.bigcommerce.com/s-iakwzr7rs7/images/stencil/1280x1280/products/4326/5871/1883_22102989_FR__85932.1565030423.jpg?c=2"}
+]

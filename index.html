@@ -11,11 +11,11 @@
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" href="css/bootstrap.css">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-
-    <script src="js/bootstrap.js"></script>
     <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
     <script src="js/main.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 </head>
 <body onload="checkCookie()">
 <div class="container">
@@ -24,10 +24,10 @@
             <ul class="nav nav-pills float-right">
                 <li class="nav-item">
                     <!-- sr-only, hides element to all devices except screen readers -->
-                    <a class="nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link active" href="#home">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
+                    <a class="nav-link" href="#ajax">AJAX</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Contact</a>
@@ -36,47 +36,58 @@
         </nav>
         <h3 id="nav-title" class="text-muted random-color">HSLU WebTec Testat</h3>
     </div>
-
-    <div class="jumbotron">
-        <h1 class="display-3 random-color random-color-interval">Attestation</h1>
-        <p class="lead">The code for this beautiful designed website is available on my personal GitHub account</p>
-        <p><a class="btn btn-lg btn-success" href="https://github.com/FabianGroeger96/webtec" role="button">GET IT
-            NOW!</a></p>
-    </div>
-
-    <div id="alert-cookie" class="alert alert-success" role="alert">
-        <h4 class="alert-heading">Welcome Back!</h4>
-        <p>You have looked at me in the past when I'm not mistaken...</p>
-        <p class="mb-0">Last visit: <span id="span-last-visit" style="font-weight: bold;"></span></p>
-        <hr>
-        <button type="button" class="btn btn-outline-danger" onclick="removeCookie('last_visit')">Remove Cookie</button>
-    </div>
-
-    <div class="row marketing">
-        <div class="col-lg-6">
-            <h4 class="random-color">Subheading</h4>
-            <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
-
-            <h4 class="random-color">Subheading</h4>
-            <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet
-                fermentum.</p>
-
-            <h4 class="random-color">Subheading</h4>
-            <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+    <div id="home" class="border-bottom">
+        <div class="jumbotron">
+            <h1 class="display-3 random-color random-color-interval">Attestation</h1>
+            <p class="lead">The code for this beautiful designed website is available on my personal GitHub account</p>
+            <p><a class="btn btn-lg btn-success" href="https://github.com/FabianGroeger96/webtec" role="button">GET IT
+                NOW!</a></p>
         </div>
 
-        <div class="col-lg-6">
-            <h4 class="random-color">Subheading</h4>
-            <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+        <div id="alert-cookie" class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Welcome Back!</h4>
+            <p>You have looked at me in the past when I'm not mistaken...</p>
+            <p class="mb-0">Last visit: <span id="span-last-visit" style="font-weight: bold;"></span></p>
+            <hr>
+            <button type="button" class="btn btn-outline-danger" onclick="removeCookie('last_visit')">Remove Cookie
+            </button>
+        </div>
 
-            <h4 class="random-color">Subheading</h4>
-            <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet
-                fermentum.</p>
+        <div class="row marketing">
+            <div class="col-lg-6">
+                <h4 class="random-color">Subheading</h4>
+                <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
 
-            <h4 class="random-color">Subheading</h4>
-            <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+                <h4 class="random-color">Subheading</h4>
+                <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet
+                    fermentum.</p>
+
+                <h4 class="random-color">Subheading</h4>
+                <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+            </div>
+
+            <div class="col-lg-6">
+                <h4 class="random-color">Subheading</h4>
+                <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+
+                <h4 class="random-color">Subheading</h4>
+                <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet
+                    fermentum.</p>
+
+                <h4 class="random-color">Subheading</h4>
+                <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+            </div>
         </div>
     </div>
+
+    <div id="ajax" class="border-bottom marketing">
+        <h1 class="random-color random-color-interval">AJAX</h1>
+        <p>These quotes are loaded via AJAX from a "quotes.txt"</p>
+        <div id="card_container" class="card-columns">
+            <!-- AJAX will be loded into this -->
+        </div>
+    </div>
+
 
     <footer class="footer">
         <p>&copy; Fabian Gröger 2019</p>

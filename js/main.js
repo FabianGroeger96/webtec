@@ -23,7 +23,36 @@ $(document).ready(function () {
         randomChangeLetterColors(".random-color-interval");
     }, 200);
 
+    // get cite.txt file via ajax
+    $.getJSON("assets/quotes.txt", function (response) {
+        var cards = [];
+        $.each(response, function (key, val) {
+            cards.push("<div class='card random-bg-color random-bg-color-interval'>" +
+                "<img class='card-img-top' src='" + val.image + "' alt='Card image cap'>" +
+                "<div class='card-body text-center'>" +
+                "<p id='cite_1' class='card-text'>" + val.quote + "</p>" +
+                "</div>" +
+                "</div>"
+            )
+        });
+
+        $("#card_container").append(cards);
+
+    }).then(function () {
+        // random bg color for cites
+        randomChangeBGColor(".random-bg-color");
+        setInterval(function () {
+            randomChangeBGColor(".random-bg-color-interval");
+        }, 200);
+    });
 });
+
+function randomChangeBGColor(objRef) {
+    $(objRef).each(function (i, obj) {
+        console.log(obj);
+        $(obj).css("background-color", "hsla(" + Math.floor(Math.random() * (360)) + ", 75%, 58%, 1)");
+    });
+}
 
 function randomChangeLetterColors(objRef) {
     $(objRef).each(function (i, obj) {
@@ -98,5 +127,5 @@ function formatDate(date) {
     let monthIndex = date.getMonth();
     let year = date.getFullYear();
 
-    return  day + '. ' + monthNames[monthIndex] + ' ' + year + ' at ' + hours + ':' + minutes + ':' + seconds;
+    return day + '. ' + monthNames[monthIndex] + ' ' + year + ' at ' + hours + ':' + minutes + ':' + seconds;
 }
