@@ -16,6 +16,7 @@ body {
 .header {
     padding-bottom: 1rem;
     border-bottom: .05rem solid #e5e5e5;
+    margin-bottom: 15px;
 }
 
 /* Make the masthead heading the same height as the navigation */
@@ -63,6 +64,10 @@ body {
     margin-top: 1.5rem;
 }
 
+.text-center {
+    white-space: pre-wrap;
+}
+
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 48em) {
     /* Remove the padding we set earlier */
@@ -82,4 +87,37 @@ body {
     .jumbotron {
         border-bottom: 0;
     }
+}
+
+.nav-link.active {
+    color: #ffffff !important;
+}
+
+.nav-item a {
+    padding: 10px 15px !important;
+}
+
+#navbarSupportedContent {
+    margin-top: 15px !important;
+}
+
+/* Style the navbar */
+#navbar {
+    overflow: hidden;
+    background-color: #ffffff;
+}
+
+nav {
+    background: #ffffff;
+    min-height: 85px;
+}
+
+/*sticky header position*/
+.sticky.is-sticky {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
 }
