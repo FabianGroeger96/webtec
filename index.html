@@ -17,7 +17,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 </head>
-<body onload="checkCookie()">
+<body onload="checkCookie()" data-spy="scroll" data-target=".navbar" data-offset="50">
 <div class="container">
 
     <nav class="header navbar navbar-light navbar-expand-lg top-navbar" data-toggle="sticky-onscroll">
@@ -97,6 +97,17 @@
         <div id="card_container" class="card-columns">
             <!-- AJAX will be loded into this -->
         </div>
+    </div>
+
+    <div id="canvas-div" class="marketing" style="width: 100%">
+        <h1 class="random_color random-color-interval">Canvas</h1>
+        <p>Click on the canvas to <b>taste the rainbow!</b></p>
+        <p>
+            <button id="taste-the-rainbow" type="button" class="btn random-bg-color" onclick="randomColorsCircles()">
+                Taste the fucking rainbow
+            </button>
+        </p>
+        <canvas id="canvas"></canvas>
     </div>
 
 

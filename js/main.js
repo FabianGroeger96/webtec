@@ -1,3 +1,8 @@
+// initialize variables
+let random_colors = false;
+let random_timeout = 200;
+
+// JQuery
 $(document).ready(function () {
 
     // random color for heading
@@ -21,7 +26,7 @@ $(document).ready(function () {
     // create interval for random changing colors
     setInterval(function () {
         randomChangeLetterColors(".random-color-interval");
-    }, 200);
+    }, random_timeout);
 
     // get cite.txt file via ajax
     $.getJSON("assets/quotes.txt", function (response) {
@@ -43,9 +48,154 @@ $(document).ready(function () {
         randomChangeBGColor(".random-bg-color");
         setInterval(function () {
             randomChangeBGColor(".random-bg-color-interval");
-        }, 200);
+        }, random_timeout);
     });
 });
+
+
+// Sticky navbar
+$(document).ready(function () {
+    // Custom function which toggles between sticky class (is-sticky)
+    var stickyToggle = function (sticky, stickyWrapper, scrollElement) {
+        var stickyHeight = sticky.outerHeight();
+        var stickyTop = stickyWrapper.offset().top;
+        if (scrollElement.scrollTop() >= stickyTop) {
+            stickyWrapper.height(stickyHeight);
+            sticky.addClass("is-sticky");
+        } else {
+            sticky.removeClass("is-sticky");
+            stickyWrapper.height('auto');
+        }
+    };
+
+    // Find all data-toggle="sticky-onscroll" elements
+    $('[data-toggle="sticky-onscroll"]').each(function () {
+        var sticky = $(this);
+        var stickyWrapper = $('<div>').addClass('sticky-wrapper'); // insert hidden element to maintain actual top offset on page
+        sticky.before(stickyWrapper);
+        sticky.addClass('sticky');
+
+        // Scroll & resize events
+        $(window).on('scroll.sticky-onscroll resize.sticky-onscroll', function () {
+            stickyToggle(sticky, stickyWrapper, $(this));
+        });
+
+        // On page load
+        stickyToggle(sticky, stickyWrapper, $(window));
+    });
+});
+
+
+// canvas
+$(document).ready(function () {
+    const canvas = document.querySelector('canvas');
+
+    // make the canvas the same width as div
+    const canvas_width = $("#canvas-div").width();
+    const canvas_height = 600;
+    canvas.width = canvas_width;
+    canvas.height = canvas_height;
+
+    const brush = canvas.getContext('2d');
+
+    function Circle(x, y, dx, dy, radius) {
+        this.x = x;
+        this.y = y;
+        this.dx = dx;
+        this.dy = dy;
+        this.radius = radius;
+        this.color = tasteTheRainbow();
+        this.last_color_update = Date.now();
+
+        this.draw = function () {
+            brush.beginPath();
+            brush.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+            brush.fillStyle = this.color;
+            brush.fill();
+        };
+
+        //reverse the x or y coordinates when the circle touches the side
+        this.update = function () {
+            if (this.x + this.radius > canvas_width || this.x - this.radius < 0) {
+                this.dx = -this.dx
+            }
+
+            if (this.y + this.radius > canvas_height || this.y - this.radius < 0) {
+                this.dy = -this.dy
+            }
+
+            this.x += this.dx;
+            this.y += this.dy;
+
+            let time_delta = Math.abs(Date.now() - this.last_color_update);
+            if (random_colors) {
+                if (time_delta > random_timeout) {
+                    this.color = tasteTheRainbow();
+                    this.last_color_update = Date.now();
+                }
+            }
+
+            this.draw()
+        }
+    }
+
+    function tasteTheRainbow() {
+        let hexColors = 'ABCDEF0123456789';
+        let skittlesMaker = '#';
+        for (let i = 0; i < 6; i++) {
+            skittlesMaker += hexColors[Math.floor(Math.random() * 16)]
+        }
+        return skittlesMaker
+    }
+
+    let circleArray = [];
+
+    //Create circles based on how long you hold the mouse down
+    let timer = 0;
+    let x, y;
+    $("#canvas").on("mousedown", function (e) {
+        timer = new Date();
+
+        let pos = getMousePos(canvas, e);
+        x = pos.x;
+        y = pos.y;
+    });
+
+    $("#canvas").on("mouseup", function (e) {
+        let timePassed = (new Date() - timer) / 10;
+        if (timePassed > 100) {
+            timePassed = 100
+        }
+        let radius = timePassed;
+        timer = 0;
+
+        let dx = (Math.random() - 0.5) * 10;
+        let dy = (Math.random() - 0.5) * 10;
+        circleArray.push(new Circle(x, y, dx, dy, radius));
+    });
+
+    function animate() {
+        requestAnimationFrame(animate);
+        brush.clearRect(0, 0, innerWidth, innerHeight);
+        for (let i = 0; i < circleArray.length; i++) {
+            circleArray[i].update()
+        }
+    }
+
+    animate();
+});
+
+// Functions
+
+// Random Colors
+function randomColorsCircles() {
+    random_colors = !random_colors;
+    if (random_colors) {
+        $("#taste-the-rainbow").html("Stop the rainbow")
+    } else {
+        $("#taste-the-rainbow").html("Taste the fucking rainbow")
+    }
+}
 
 function randomChangeBGColor(objRef) {
     $(objRef).each(function (i, obj) {
@@ -64,6 +214,7 @@ function randomChangeLetterColors(objRef) {
     });
 }
 
+// Cookie
 function setCookie(cname, cvalue, exdays) {
     const d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
@@ -129,36 +280,11 @@ function formatDate(date) {
     return day + '. ' + monthNames[monthIndex] + ' ' + year + ' at ' + hours + ':' + minutes + ':' + seconds;
 }
 
-
-// Sticky navbar
-// =========================
-$(document).ready(function () {
-    // Custom function which toggles between sticky class (is-sticky)
-    var stickyToggle = function (sticky, stickyWrapper, scrollElement) {
-        var stickyHeight = sticky.outerHeight();
-        var stickyTop = stickyWrapper.offset().top;
-        if (scrollElement.scrollTop() >= stickyTop) {
-            stickyWrapper.height(stickyHeight);
-            sticky.addClass("is-sticky");
-        } else {
-            sticky.removeClass("is-sticky");
-            stickyWrapper.height('auto');
-        }
+// Canvas
+function getMousePos(canvas, evt) {
+    let rect = canvas.getBoundingClientRect();
+    return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
     };
-
-    // Find all data-toggle="sticky-onscroll" elements
-    $('[data-toggle="sticky-onscroll"]').each(function () {
-        var sticky = $(this);
-        var stickyWrapper = $('<div>').addClass('sticky-wrapper'); // insert hidden element to maintain actual top offset on page
-        sticky.before(stickyWrapper);
-        sticky.addClass('sticky');
-
-        // Scroll & resize events
-        $(window).on('scroll.sticky-onscroll resize.sticky-onscroll', function () {
-            stickyToggle(sticky, stickyWrapper, $(this));
-        });
-
-        // On page load
-        stickyToggle(sticky, stickyWrapper, $(window));
-    });
-});
+}

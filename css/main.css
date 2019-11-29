@@ -121,3 +121,16 @@ nav {
     z-index: 1000;
     width: 100%;
 }
+
+canvas {
+    width: 100%;
+    display: block;
+}
+
+#canvas {
+    border: .05rem solid #e5e5e5;
+}
+
+.random-bg-color {
+    color: #ffffff !important;
+}
