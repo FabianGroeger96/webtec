@@ -6,23 +6,18 @@ let canvas;
 let canvas_width;
 let canvas_height;
 
+let brush;
+
+let circleArray = [];
+
 // JQuery
 $(document).ready(function () {
-
-    // random color for heading
-    $('a.nav-link').each(function (i, obj) {
-        if ($(obj).hasClass("active")) {
-            $(obj).css("background-color", "hsla(" + Math.floor(Math.random() * (360)) + ", 75%, 58%, 1)");
-        } else {
-            $(obj).css("color", "hsla(" + Math.floor(Math.random() * (360)) + ", 75%, 58%, 1)");
-        }
-    });
+    // --- Random Colors ---
+    // random color for menu
+    randomMenuColors();
 
     // random color for btn-success
-    $('.btn-success').each(function (i, obj) {
-        $(obj).css("background-color", "hsla(" + Math.floor(Math.random() * (360)) + ", 75%, 58%, 1)");
-        $(obj).css("border", "none");
-    });
+    randomChangeBGColor(".btn-success")
 
     // random color for titles
     randomChangeLetterColors(".random-color");
@@ -32,6 +27,7 @@ $(document).ready(function () {
         randomChangeLetterColors(".random-color-interval");
     }, random_timeout);
 
+    // --- AJAX ---
     // get cite.txt file via ajax
     $.getJSON("assets/quotes.txt", function (response) {
         var cards = [];
@@ -54,15 +50,12 @@ $(document).ready(function () {
             randomChangeBGColor(".random-bg-color-interval");
         }, random_timeout);
     });
-});
 
-
-// Sticky navbar
-$(document).ready(function () {
-    // Custom function which toggles between sticky class (is-sticky)
-    var stickyToggle = function (sticky, stickyWrapper, scrollElement) {
-        var stickyHeight = sticky.outerHeight();
-        var stickyTop = stickyWrapper.offset().top;
+    // --- Sticky Navbar ---
+    // function which toggles between sticky class (is-sticky)
+    let stickyToggle = function (sticky, stickyWrapper, scrollElement) {
+        let stickyHeight = sticky.outerHeight();
+        let stickyTop = stickyWrapper.offset().top;
         if (scrollElement.scrollTop() >= stickyTop) {
             stickyWrapper.height(stickyHeight);
             sticky.addClass("is-sticky");
@@ -74,8 +67,8 @@ $(document).ready(function () {
 
     // Find all data-toggle="sticky-onscroll" elements
     $('[data-toggle="sticky-onscroll"]').each(function () {
-        var sticky = $(this);
-        var stickyWrapper = $('<div>').addClass('sticky-wrapper'); // insert hidden element to maintain actual top offset on page
+        let sticky = $(this);
+        let stickyWrapper = $('<div>').addClass('sticky-wrapper'); // insert hidden element to maintain actual top offset on page
         sticky.before(stickyWrapper);
         sticky.addClass('sticky');
 
@@ -87,72 +80,21 @@ $(document).ready(function () {
         // On page load
         stickyToggle(sticky, stickyWrapper, $(window));
     });
-});
 
+    // Event when other object will be activated
+    $(window).on('activate.bs.scrollspy', function (e, obj) {
+        randomMenuColors();
+    });
 
-// canvas
-$(document).ready(function () {
+    // --- Canvas ---
     resizeCanvas("canvas");
-
     $(window).on('resize', function () {
         resizeCanvas("canvas");
     });
 
-    const brush = canvas.getContext('2d');
+    brush = canvas.getContext('2d');
 
-    function Circle(x, y, dx, dy, radius) {
-        this.x = x;
-        this.y = y;
-        this.dx = dx;
-        this.dy = dy;
-        this.radius = radius;
-        this.color = tasteTheRainbow();
-        this.last_color_update = Date.now();
-
-        this.draw = function () {
-            brush.beginPath();
-            brush.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-            brush.fillStyle = this.color;
-            brush.fill();
-        };
-
-        //reverse the x or y coordinates when the circle touches the side
-        this.update = function () {
-            if (this.x + this.radius > canvas_width || this.x - this.radius < 0) {
-                this.dx = -this.dx
-            }
-
-            if (this.y + this.radius > canvas_height || this.y - this.radius < 0) {
-                this.dy = -this.dy
-            }
-
-            this.x += this.dx;
-            this.y += this.dy;
-
-            let time_delta = Math.abs(Date.now() - this.last_color_update);
-            if (random_colors) {
-                if (time_delta > random_timeout) {
-                    this.color = tasteTheRainbow();
-                    this.last_color_update = Date.now();
-                }
-            }
-
-            this.draw()
-        }
-    }
-
-    function tasteTheRainbow() {
-        let hexColors = 'ABCDEF0123456789';
-        let skittlesMaker = '#';
-        for (let i = 0; i < 6; i++) {
-            skittlesMaker += hexColors[Math.floor(Math.random() * 16)]
-        }
-        return skittlesMaker
-    }
-
-    let circleArray = [];
-
-    //Create circles based on how long you hold the mouse down
+    // Create circles based on how long you hold the mouse down
     let timer = 0;
     let x, y;
     $("#canvas").on("mousedown", function (e) {
@@ -162,7 +104,6 @@ $(document).ready(function () {
         x = pos.x;
         y = pos.y;
     });
-
     $("#canvas").on("mouseup", function (e) {
         let timePassed = (new Date() - timer) / 10;
         if (timePassed > 100) {
@@ -176,20 +117,11 @@ $(document).ready(function () {
         circleArray.push(new Circle(x, y, dx, dy, radius));
     });
 
-    function animate() {
-        requestAnimationFrame(animate);
-        brush.clearRect(0, 0, innerWidth, innerHeight);
-        for (let i = 0; i < circleArray.length; i++) {
-            circleArray[i].update()
-        }
-    }
-
     animate();
 });
 
-// Functions
-
-// Random Colors
+// --- Functions ---
+// Random Colors UI
 function randomColorsCircles() {
     random_colors = !random_colors;
     if (random_colors) {
@@ -212,6 +144,18 @@ function randomChangeLetterColors(objRef) {
         for (var i = 0; i < chars.length; i++) {
             var span = $('<span>' + chars[i] + '</span>').css("color", "hsla(" + Math.floor(Math.random() * (360)) + ", 75%, 58%, 1)");
             $(obj).append(span);
+        }
+    });
+}
+
+function randomMenuColors() {
+    $('a.nav-link').each(function (i, obj) {
+        if ($(obj).hasClass("active")) {
+            $(obj).css("color", "");
+            $(obj).css("background-color", "hsla(" + Math.floor(Math.random() * (360)) + ", 75%, 58%, 1)");
+        } else {
+            $(obj).css("color", "hsla(" + Math.floor(Math.random() * (360)) + ", 75%, 58%, 1)");
+            $(obj).css("background-color", "");
         }
     });
 }
@@ -299,4 +243,62 @@ function resizeCanvas(canvas_selector) {
     canvas_height = 600;
     canvas.width = canvas_width;
     canvas.height = canvas_height;
+}
+
+function Circle(x, y, dx, dy, radius) {
+    this.x = x;
+    this.y = y;
+    this.dx = dx;
+    this.dy = dy;
+    this.radius = radius;
+    this.color = tasteTheRainbow();
+    this.last_color_update = Date.now();
+
+    this.draw = function () {
+        brush.beginPath();
+        brush.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+        brush.fillStyle = this.color;
+        brush.fill();
+    };
+
+    //reverse the x or y coordinates when the circle touches the side
+    this.update = function () {
+        if (this.x + this.radius > canvas_width || this.x - this.radius < 0) {
+            this.dx = -this.dx
+        }
+
+        if (this.y + this.radius > canvas_height || this.y - this.radius < 0) {
+            this.dy = -this.dy
+        }
+
+        this.x += this.dx;
+        this.y += this.dy;
+
+        let time_delta = Math.abs(Date.now() - this.last_color_update);
+        if (random_colors) {
+            if (time_delta > random_timeout) {
+                this.color = tasteTheRainbow();
+                this.last_color_update = Date.now();
+            }
+        }
+
+        this.draw()
+    }
+}
+
+function tasteTheRainbow() {
+    let hexColors = 'ABCDEF0123456789';
+    let skittlesMaker = '#';
+    for (let i = 0; i < 6; i++) {
+        skittlesMaker += hexColors[Math.floor(Math.random() * 16)]
+    }
+    return skittlesMaker
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+    brush.clearRect(0, 0, innerWidth, innerHeight);
+    for (let i = 0; i < circleArray.length; i++) {
+        circleArray[i].update()
+    }
 }

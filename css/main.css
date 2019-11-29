@@ -134,3 +134,7 @@ canvas {
 .random-bg-color {
     color: #ffffff !important;
 }
+
+.btn-success {
+    border: none !important;
+}
