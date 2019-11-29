@@ -2,6 +2,10 @@
 let random_colors = false;
 let random_timeout = 200;
 
+let canvas;
+let canvas_width;
+let canvas_height;
+
 // JQuery
 $(document).ready(function () {
 
@@ -88,13 +92,11 @@ $(document).ready(function () {
 
 // canvas
 $(document).ready(function () {
-    const canvas = document.querySelector('canvas');
+    resizeCanvas("canvas");
 
-    // make the canvas the same width as div
-    const canvas_width = $("#canvas-div").width();
-    const canvas_height = 600;
-    canvas.width = canvas_width;
-    canvas.height = canvas_height;
+    $(window).on('resize', function () {
+        resizeCanvas("canvas");
+    });
 
     const brush = canvas.getContext('2d');
 
@@ -287,4 +289,14 @@ function getMousePos(canvas, evt) {
         x: evt.clientX - rect.left,
         y: evt.clientY - rect.top
     };
+}
+
+function resizeCanvas(canvas_selector) {
+    canvas = document.querySelector(canvas_selector);
+
+    // make the canvas the same width as div
+    canvas_width = $("#canvas-div").width();
+    canvas_height = 600;
+    canvas.width = canvas_width;
+    canvas.height = canvas_height;
 }
