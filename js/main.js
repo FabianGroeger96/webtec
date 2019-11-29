@@ -17,7 +17,7 @@ $(document).ready(function () {
     randomMenuColors();
 
     // random color for btn-success
-    randomChangeBGColor(".btn-success")
+    randomChangeBGColor(".btn-success");
 
     // random color for titles
     randomChangeLetterColors(".random-color");
@@ -97,14 +97,43 @@ $(document).ready(function () {
     // Create circles based on how long you hold the mouse down
     let timer = 0;
     let x, y;
-    $("#canvas").on("mousedown", function (e) {
+    let canvas_id = $("#canvas");
+
+    let isTouchDevice = ('ontouchstart' in document.documentElement);
+
+    canvas_id.on('touchstart', function () {
+        if (isTouchDevice) {
+            timer = new Date();
+
+            let pos = getMousePos(canvas, e);
+            x = pos.x;
+            y = pos.y;
+        }
+    });
+    canvas_id.on('touchend', function () {
+        if (isTouchDevice) {
+            let timePassed = (new Date() - timer) / 10;
+            if (timePassed > 100) {
+                timePassed = 100
+            }
+            let radius = timePassed;
+            timer = 0;
+
+            let dx = (Math.random() - 0.5) * 10;
+            let dy = (Math.random() - 0.5) * 10;
+            circleArray.push(new Circle(x, y, dx, dy, radius));
+        }
+    });
+
+    // mouse action
+    canvas_id.on("mousedown", function (e) {
         timer = new Date();
 
         let pos = getMousePos(canvas, e);
         x = pos.x;
         y = pos.y;
     });
-    $("#canvas").on("mouseup", function (e) {
+    canvas_id.on("mouseup", function (e) {
         let timePassed = (new Date() - timer) / 10;
         if (timePassed > 100) {
             timePassed = 100
